@@ -9,6 +9,30 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+# ***** INPUT SEARCH OPTIONS *****
+# TODO: CREATE AN INPUT FUNCTION SO I CAN CUSTOMIZE SEARCH TERMS WITHOUT HAVING TO CHANGE THE SCRIPT
+# If searching for everything, simply change `useCustomSearchOptions` to False and ignore searchOptionsDict
+# But if you want a filtered search, useCustomSearchOptions=True and assign values to searchOptionsDict items
+useCustomSearchOptions = True
+# only fill out the items below if useCustomSearchOptions = True
+# Make an item blank '' to ignore it in the search filter
+# To choose multiple within the same category, put '%2C' between them (e.g. '&purchase_type=purchase%2Cmodel')
+# The URL builder function will use the '&' symbol as needed to include a search term
+searchOptionsDict = {
+    'price_min': '10000',         # Includes cents
+    'price_max': '5000000',       # Includes cents
+    'area_min': '200',
+    'area_max': '700',            # The website slider maxes out at 700 so this may be a limit?  Will need to test
+    'purchase_type': 'purchase',  # Options are: 'purchase' 'rent' 'model'.  Connect multiple with the also keyword below
+    'location_type': 'mobile',    # Options are:  'mobile' 'stationary' 'floating'
+    'property_type': '',          # Options are: 'tiny_house' 'cabin boat' 'rv' 'converted_bus' 'other' 'land' 'camper' 'container_home' 'tiny_house_shell' 'apartment' 'tiny_house_trailer' 'park_model
+    'bedrooms_min': '',
+    'bedrooms_max': '',
+    'bathrooms_min': '',
+    'bathrooms_max': '',
+    'page': '1'
+}
+
 # ***** GLOBAL VARIABLES / INITIALIZE *****
 driver = webdriver.PhantomJS()
 driver.set_window_size(1120, 550)
@@ -20,7 +44,7 @@ def createNewURL(searchCriteriaDict = {'page':'1'}):
     if len(searchCriteriaDict)==1:
         print("*** No search criteria added. Creating a URL to pull all listings...")
     else:
-        print("*** Custom URL being build from search criteria inputs...")
+        print("*** Custom URL being created using search criteria inputs...")
     url = 'https://tinyhouselistings.com/search?'
     for key in searchCriteriaDict:
         if searchCriteriaDict[key] != '':
@@ -247,39 +271,18 @@ def saveToCSV(subdirectoryName):
     print("*** Saving records to csv format in subdirectory: " + subdirectoryName)
     makeSubdirectory(subdirectoryName)
     dateStamp = getDateStamp()
-    listingData.to_csv(subdirectoryName + "/" + "TH Listings " + dateStamp + ".csv", header=True, index=False)
+    fullOrFiltered = '--filtered' if useCustomSearchOptions else '--full'
+    listingData.to_csv(subdirectoryName + "/" + "TH Listings " + dateStamp + fullOrFiltered + ".csv", header=True, index=False)
     print("DONE")
 
-
-# ***** INPUT SEARCH OPTIONS *****
-# Leave an item blank to ignore it in the search filter
-# To choose multiple within the same category, put '%2C' between them (e.g. '&purchase_type=purchase%2Cmodel')
-# The URL builder function will use the '&' symbol as needed to include a search term
-# TODO: CREATE AN INPUT FUNCTION SO I CAN CUSTOMIZE SEARCH TERMS WITHOUT HAVING TO CHANGE THE SCRIPT
-searchOptionsDict = {
-    'price_min': '10000',         # Includes cents
-    'price_max': '5000000',       # Includes cents
-    'area_min': '200',
-    'area_max': '700',            # The website slider maxes out at 700 so this may be a limit?  Will need to test
-    'purchase_type': 'purchase',  # Options are: 'purchase' 'rent' 'model'.  Connect multiple with the also keyword below
-    'location_type': 'mobile',    # Options are:  'mobile' 'stationary' 'floating'
-    'property_type': '',          # Options are: 'tiny_house' 'cabin boat' 'rv' 'converted_bus' 'other' 'land' 'camper' 'container_home' 'tiny_house_shell' 'apartment' 'tiny_house_trailer' 'park_model
-    'bedrooms_min': '',
-    'bedrooms_max': '',
-    'bathrooms_min': '',
-    'bathrooms_max': '',
-    'page': '1'
-}
 
 # ***** RUN SCRIPTS *****
 time_start = time.time()
 print("\n\n***** 1. CREATING A CUSTOMIZED SEARCH URL *****\n")
-# TODO: Add ability to select search type outside of script editing
-# UNCOMMENT ONE OF THE TWO OPTIONS BELOW TO EITHER RUN A FULL OR A FILTERED SCRAPE
-# OPTION 1:
-search_url = createNewURL(searchOptionsDict)   # Scrape data based on custom search criteria above (or from input)
-# OR OPTION 2:
-# search_url = createNewURL()                    # Scrape data from ALL listings
+if (useCustomSearchOptions):
+    search_url = createNewURL(searchOptionsDict)   # Scrape data based on custom search criteria above (or from input)
+else:
+    search_url = createNewURL()                    # Scrape data from ALL listings
 
 # Get listing and page counts
 print("\n\n***** 2. GETTING ORIGINAL LISTING COUNT AND CALCULATING PAGE COUNT *****\n")
