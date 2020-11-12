@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # TODO: CREATE AN INPUT FUNCTION SO I CAN CUSTOMIZE SEARCH TERMS WITHOUT HAVING TO CHANGE THE SCRIPT
 # If searching for everything, simply change `useCustomSearchOptions` to False and ignore searchOptionsDict
 # But if you want a filtered search, useCustomSearchOptions=True and assign values to searchOptionsDict items
-useCustomSearchOptions = False
+useCustomSearchOptions = True
 # only fill out the items below if useCustomSearchOptions = True
 # Make an item blank '' to ignore it in the search filter
 # To choose multiple within the same category, put '%2C' between them (e.g. '&purchase_type=purchase%2Cmodel')
@@ -22,7 +22,7 @@ searchOptionsDict = {
     'price_min': '10000',         # Includes cents
     'price_max': '5000000',       # Includes cents
     'area_min': '200',
-    'area_max': '700',            # The website slider maxes out at 700 so this may be a limit?  Will need to test
+    'area_max': '1000',           # The website slider maxes out at 700 so that may be a limit?  Will need to test
     'purchase_type': 'purchase',  # Options are: 'purchase' 'rent' 'model'.  Connect multiple with the also keyword below
     'location_type': 'mobile',    # Options are:  'mobile' 'stationary' 'floating'
     'property_type': '',          # Options are: 'tiny_house' 'cabin boat' 'rv' 'converted_bus' 'other' 'land' 'camper' 'container_home' 'tiny_house_shell' 'apartment' 'tiny_house_trailer' 'park_model
