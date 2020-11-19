@@ -221,15 +221,13 @@ def isolateValuesInSeries(seriesOfStrings):
 
 def validateColumns(df):
     print("*** Validating columns...")
-    correctColumns = ['Name', 'Price', 'Location', 'City', 'State', 'Country', 'Type', 'Foundation', 'Misc', 'Bedrooms', 'Lofts', 'Bathrooms', 
-                        'Size', 'Length', 'Width', 'Days on site', 'Number of views', 'Times dreamlisted', 'Link']
+    correctColumns = ['Name', 'Type', 'Foundation', 'Price', 'Size', 'Length', 'Width', 'Bedrooms', 'Bathrooms', 'Lofts', 'Misc',
+                        'Location', 'Link', 'City', 'State', 'Country', 'Days on site', 'Number of views', 'Times dreamlisted']
     for col in correctColumns:
         if col not in df.columns:
             print("- Found a missing column: " + col + ".  Adding it now")
             df[col] = pd.Series(dtype=int) # create an empty column with the missing column name
-    # Ensure that Link is the last column and return the DataFrame
-    dfTemp = df.pop('Link')
-    df['Link'] = dfTemp
+    df = df[correctColumns] # Reorder the columns to match preferred order above
     print("DONE")
     return df
 
