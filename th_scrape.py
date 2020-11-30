@@ -19,7 +19,7 @@ useCustomSearchOptions = True
 # To choose multiple within the same category, put '%2C' between them (e.g. '&purchase_type=purchase%2Cmodel')
 # The URL builder function will use the '&' symbol as needed to include a search term
 searchOptionsDict = {
-    'price_min': '10000',         # Includes cents
+    'price_min': '100000',        # Includes cents
     'price_max': '5000000',       # Includes cents
     'area_min': '200',
     'area_max': '5000',           # The website slider maxes out at 700 so that may be a limit?  Will need to test
