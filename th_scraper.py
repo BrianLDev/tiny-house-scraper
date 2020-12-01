@@ -13,7 +13,9 @@ from selenium.webdriver.support import expected_conditions as EC
 # TODO: CREATE AN INPUT FUNCTION SO I CAN CUSTOMIZE SEARCH TERMS WITHOUT HAVING TO CHANGE THE SCRIPT
 # If searching for everything, simply change `useCustomSearchOptions` to False and ignore searchOptionsDict
 # But if you want a filtered search, useCustomSearchOptions=True and assign values to searchOptionsDict items
-useCustomSearchOptions = True
+# NOTE - It looks like the website's filtered search isn't working properly.  Found out it's excluding some homes that should be included, and vice versa.
+#        Best to just run a full search and manually filter afterwards
+useCustomSearchOptions = False
 # only fill out the items below if useCustomSearchOptions = True
 # Make an item blank '' to ignore it in the search filter
 # To choose multiple within the same category, put '%2C' between them (e.g. '&purchase_type=purchase%2Cmodel')
